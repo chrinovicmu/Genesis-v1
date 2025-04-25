@@ -7,37 +7,37 @@ MULTI_BOOT_HEADER_FLAGS equ MULTI_BOOT_PAGE_ALIGN | MULTI_BOOT_INFO
 MULTI_BOOT_CHECKSUM     equ -(MULTI_BOOT_HEADER_MAGIC + MULTI_BOOT_HEADER_FLAGS)
 
 
-[Bits 32]
+section .multiboot
+    align  4
+    dd     MULTI_BOOT_HEADER_MAGIC
+    dd     MULTI_BOOT_HEADER_FLAGS
+    dd     MULTI_BOOT_CHECKSUM
 
-[GLOBAL multiboot]
-[EXTERN code]
-[EXTERN bss]
-[EXTERN end]
-
-
-multiboot:
-    dd MULTI_BOOT_HEADER_MAGIC
-    
-    dd MULTI_BOOT_HEADER_FLAGS 
-
-    dd MULTI_BOOT_CHECKSUM 
-
-    dd  multiboot   ;location 
-    dd  code
-    dd  bss 
-    dd  end 
-    dd  start   ; kernel entry point 
-
+[Extern kmain]
 [GLOBAL start]
-[EXTERN kmain]
+
+section .bss
+    align  16
+
+    stack_bottom:
+    resb    16384 ;16kb 
+    stack_top: 
+
+section .text
+    global _start
+
+    _start:
+
 
 start:
 
-    push    ebx 
+    mov     esp, stack_top
+
+    call    kmain 
 
     cli 
-    call kmain
-    jmp $
+    hlt 
+    jmp 1b 
 
 
 
