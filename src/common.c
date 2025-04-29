@@ -11,9 +11,9 @@ void outb(uint16_t port, uint8_t value)
     );
 }
 
-uint16_t inb(uint16_t port)
+uint8_t inb(uint16_t port)
 {
-    uint16_t ret; 
+    uint8_t ret; 
 
     /*load port in dx register 
     * perform inb on . input one byte from dx register to al*

@@ -1,6 +1,6 @@
 #include "monitor.h"
 
-#define NULL ((void*)0)
+#define LL ((void*)0)
 
 uint16_t *video_memory = (uint16_t *)0xB8000; 
 
@@ -134,7 +134,7 @@ void monitor_clear()
 void monitor_write(char *string)
 {
     int x =0; 
-    while(string[x] != NULL)
+    while(string[x])
     {
         monitor_put(string[x]);
         ++x; 

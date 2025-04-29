@@ -1,19 +1,18 @@
+SOURCES=boot.o kernel.o monitor.o common.o
+CFLAGS=-m32 -ffreestanding -O2 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -c
+LDFLAGS=-T linker.ld -ffreestanding -O2 -nostdlib
+ASFLAGS=-f elf32
 
-SOURCES=boot.o main.o  
-CFLAGS=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -c
-LDFLAGS=-Tlink.ld 
-ASFLAGS=-felf32
-
-all: kernel
+all: kernel.bin
 
 clean:
-	-rm *.o kernel 
+	rm -f *.o kernel.bin
 
-kernel: $(SOURCES)
-	ld -m elf_i386 $(LDFLAGS) -o kernel $(SOURCES)
+kernel.bin: $(SOURCES)
+	i686-linux-gnu-gcc $(LDFLAGS) -o kernel.bin $(SOURCES) -lgcc
 
 %.o: %.c
-	gcc $(CFLAGS) $< -o $@
+	i686-linux-gnu-gcc $(CFLAGS) $< -o $@
 
 %.o: %.s
 	nasm $(ASFLAGS) $< -o $@
