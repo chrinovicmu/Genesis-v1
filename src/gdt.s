@@ -1,7 +1,7 @@
 
-[GLOBAL gdt_flush]
+[GLOBAL gdt_load]
 
-gdt_flush:
+gdt_load:
 
     mov     eax, [esp+4]    ;get pointer of gdt passed as a parameter
     lgdt    [eax]
@@ -12,8 +12,14 @@ gdt_flush:
     mov     fs, ax 
     mov     gs, ax 
     mov     ss, ax 
-    jmp     0x80:.flush     ;far jump to code segment 
+    jmp     0x80:.load    ;far jump to code segment 
 
-.flush:
+.load:
     ret 
 
+[GLOBAL idt_load]
+
+idt_load:
+    mov eax, [esp+4]
+    lidt    [eax]
+    ret 

@@ -1,3 +1,3 @@
-## AquaOS ## 
+## Genesis ## 
 
-Alas, a 32-bit MULTI-BOOT x86 UNIX Kernel that doesn't suck :p 
+Alas, a 32-bit x86 Unix-based Operating System that doesn't suck :p 
