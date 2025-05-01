@@ -7,7 +7,6 @@
 extern void gdt_load(uint32_t); 
 extern void idt_load(uint32_t); 
 
-
 static void init_gdt(); 
 static void init_idt(); 
 
@@ -25,21 +24,19 @@ void init_descriptor_tables(void)
     init_gdt();
     init_idt();
 }
-
 static void init_gdt(void)
 {
     gdt_ptr.limit = (sizeof(gdt_entry_t)*MAX_GDT_ENTRIES);
     gdt_ptr.base = (uint32_t)&gdt_entries;
 
-    gdt_set_gate(0, 0, 0, 0, 0);                /*Null segmnet */ 
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); /*Code segment */
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); /*Data segment */
-    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); /*User mode code segment */ 
-    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); /*User mode data segment */  
+    gdt_set_gate(0, 0, 0, 0, 0);                
+    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); 
+    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); 
+    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); 
+    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); 
 
     gdt_load((uint32_t)&gdt_ptr); 
 }
-
 static void init_idt(void)
 {
     idt_ptr.limit = sizeof(idt_entry_t) * (MAX_IDT_ENTRIES - 1);
@@ -53,9 +50,7 @@ static void init_idt(void)
     idt_set_gate(31, (uint32_t)isr32, 0x08, 0x8E);
 
     idt_load((uint32_t)&idt_ptr); 
-
 }
-/*set value of one gdt entry in memory */ 
 static void gdt_set_gate(int32_t entry_num, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity)
 {
     gdt_entries[entry_num].base_low = (base & 0xFFFF);
@@ -68,15 +63,10 @@ static void gdt_set_gate(int32_t entry_num, uint32_t base, uint32_t limit, uint8
     gdt_entries[entry_num].granularity |= granularity & 0xF0; 
     gdt_entries[entry_num].access = access; 
 }
-
-
-/*set value for single idt entry */ 
-
 static void idt_set_gate(uint8_t entry_num, uint32_t offset, uint16_t selector, uint8_t atrribute_flags)
 {
     idt_entries[entry_num].offset_low = offset & 0xFFFF; 
     idt_entries[entry_num].offset_high = (offset >> 16) &0xFFFF; 
-
     idt_entries[entry_num].selector = selector; 
     idt_entries[entry_num].always0 = 0; 
 
