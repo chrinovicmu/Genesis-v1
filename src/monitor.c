@@ -1,144 +1,85 @@
+#include "common.h"
+#include <stddef.h>
 #include "monitor.h"
 
-#define LL ((void*)0)
 
-uint16_t *video_memory = (uint16_t *)0xB8000; 
-
-uint8_t cursor_x = 0; 
-uint8_t cursor_y = 0;
-
-static void move_cursor(void)
+inline uint8_t vga_atrribute_color(enum vga_color fg, enum vga_color bg)
 {
-    uint16_t cursor_location = cursor_y * 80 + cursor_x; 
+    uint8_t colors = 0;
+    colors |= fg; 
+    colors |= (bg << 0x0F) << 4; 
 
-    /*tell vga we are settinhg the hight cursor bytes */ 
-    outb(0x3D4, 14); 
-
-    /*send the high curosr bytes */ 
-    outb(0x3D5, cursor_location >> 8); 
-
-    /*tell vga we are settinh low cursor bytes */ 
-    outb(0x3D4, 15); 
-
-    /*send the low cursor bytes*/
-    outb(0x3D5, cursor_location);
+    return colors;
 }
 
-static void scroll(void)
+inline uint16_t vga_atrribute(unsigned char uc , uint8_t colors)
 {
-    uint8_t attribute_byte = (0 << 4) | (15 & 0x0F); 
-    uint16_t blank = 0x20 | (attribute_byte << 8); 
+    uint16_t attributes = 0; 
+    attributes |= uc;
+    attributes |=(uint16_t)colors << 8; 
 
-    // row 25 is the end , we need to scrool up 
-    if(cursor_y >= 25)
+    return attributes; 
+}
+
+size_t strlen(const char *str)
+{
+    size_t len = 0; 
+    while(str[len]){
+        len++;
+    }
+    return len;
+}
+
+void terminal_initialize(void)
+{
+    terminal_row = 0; 
+    terminal_column = 0; 
+    terminal_color = vga_attribute_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK); 
+
+    for(size_t y = 0; y < VGA_HEIGHT; ++y)
     {
-        /*perform actaul scrolling
-         * each row has 80 characters 
-         * shifts all text up by one row by coping the contents
-         * of the next row to the current row*/
-
-        int x; 
-        for(x = 0 * 80; x < 24 * 80; x++)
+        for (size_t x = 0; x < VGA_WIDTH; ++x)
         {
-            video_memory[x] = video_memory[x + 80];
+            const size_t index = y * VGA_WIDTH +x;
+            terminal_buffer[index] = vga_atrribute(' ', terminal_color);
         }
+    }
+}
 
-        /*last line should be blank */ 
-        /*file enire row with blank spaces */ 
+void terminal_setcolor(uint8_t color)
+{
+    terminal_color = color; 
+}
 
-        for(x = 24*80; x < 25*80; ++x)
+
+void terminal_putentryat(char c , uint8_t color, size_t x, size_t y)
+{
+    const size_t index = y * VGA_WIDTH + x;
+    terminal_buffer[index] = vga_attribute(c, color); 
+}
+
+void terminal_putchar(char c)
+{
+    terminal_putentryat(c, terminal_color, terminal_column, terminal_row); 
+    if(++terminal_column == VGA_WIDTH)
+    {
+        terminal_column = 0; 
+        if(++terminal_row == VGA_HEIGHT)
         {
-            video_memory[x] = blank;
+            terminal_row = 0; 
         }
-        /*curso should be on last line*/
-        cursor_y =  24; 
     }
 }
 
-void monitor_put(char c)
+void terminal_write(const char *data, size_t size)
 {
-    uint8_t back_color = 0; 
-    uint8_t fore_color = 15; 
-
-    uint8_t attribute_byte = (back_color << 4) | (fore_color & 0x0F);
-
-    uint16_t attribute = attribute_byte << 8;
-    uint16_t *location; 
-
-    /*handle backspace by moving cursor by once space */ 
-    if(c == 0x08 && cursor_x)
+    for(size_t x =0; x < size; ++x)
     {
-       --cursor_x; 
+        terminal_putchar(data[x]);
     }
-
-    /*handle a tab */ 
-    /*round to only multiple of 8*/
-    else if(c == 0x09)
-    {
-        cursor_x = (cursor_x+8) & -(8-1);
-    }
-
-
-    else if(c == '\r')
-    {
-        cursor_x = 0; 
-    }
-
-    else if(c == '\n')
-    {
-        cursor_x = 0; 
-        ++cursor_y; 
-    }
-
-    /*if any other printable charater */ 
-    else if(c == ' ')
-    {
-        /*find location to place character */
-        location = video_memory + (cursor_y*80 + cursor_x); 
-        /*place the character */ 
-        *location = c | attribute_byte; 
-        /*move cursor to next location */ 
-        ++cursor_x;
-    }
-
-
-    if(cursor_x >= 80)
-    {
-        cursor_x = 0; 
-        ++cursor_y; 
-    }
-
-    scroll();
-    move_cursor(); 
 }
-
-
-void monitor_clear()
+void terminal_write_string(const char* data)
 {
-    uint8_t attribute_byte = (0 << 4) | (15 & 0x0F);
-    uint16_t blank = 0x20 | (attribute_byte << 8); 
-
-    int column_num = 80; 
-    int row_num = 25; 
-    int x;
-    for(x = 0; x < (column_num * row_num); ++x)
-    {
-        video_memory[x] = blank;
-    }
-
-    cursor_x = 0;
-    cursor_y = 0;
-    move_cursor();
+    terminal_write(data, strlen(data)); 
 }
-
-void monitor_write(char *string)
-{
-    int x =0; 
-    while(string[x])
-    {
-        monitor_put(string[x]);
-        ++x; 
-    }
-}
-
 
