@@ -1,8 +1,12 @@
 #!/bin/bash
 
+set -e
+
 mkdir -p iso/boot/grub
 
-cp src/kernel.bin iso/boot/kernel.bin
+cp kernel/kernel.bin iso/boot/kernel.bin
 cp src/grub.cfg iso/boot/grub/grub.cfg
 
 grub-mkrescue -o kernel.iso iso
+
+qemu-system-i386 -kernel kernel/kernel.bin

@@ -7,10 +7,10 @@
 #define VGA_HEIGHT  25
 #define VGA_MEMORY  0xB8000 
 
-uint32_t    terminal_row;
-uint32_t    terminal_column; 
-uint8_t     terminal_color;
-uint16_t *  terminal_buffer = (uint16_t *)VGA_MEMORY;
+extern uint32_t    terminal_row;
+extern uint32_t    terminal_column; 
+extern uint8_t     terminal_color;
+extern uint16_t *  terminal_buffer;
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -31,9 +31,26 @@ enum vga_color {
 	VGA_COLOR_WHITE = 15,
 };
 
-inline uint8_t vga_attribute_color(enum vga_color fg, enum vga_color bg);
-inline uint16_t vga_attribute(unsigned char uc, uint8_t color);
+
+static inline uint8_t vga_attribute_color(enum vga_color fg, enum vga_color bg)
+{
+    uint8_t colors = 0;
+    colors |= fg; 
+    colors |= (bg << 0x0F) << 4; 
+
+    return colors;
+}
+
+static inline uint16_t vga_attribute(unsigned char uc , uint8_t colors)
+{
+    uint16_t attributes = 0; 
+    attributes |= uc;
+    attributes |=(uint16_t)colors << 8; 
+
+    return attributes; 
+}
 size_t strlen(const char* str); 
+
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t color); 
 void terminal_putentryat(char c , uint8_t color, uint32_t x , uint32_t y); 
