@@ -68,3 +68,34 @@ void terminal_write_string(const char* data)
     terminal_write(data, strlen(data)); 
 }
 
+void terminal_write_dec(uint32_t n)
+{
+    if(n == 0)
+    {
+        terminal_putchar('0');
+        return;
+    }
+    int32_t acc = n ; 
+    char c[32]; 
+    int x = 0;
+
+    while(acc > 0)
+    {
+        c[x] = '0' + (acc % 10); 
+        acc /= 10; 
+        ++x; 
+    }
+    c[x] = '\0'; 
+
+    char c2[32]; 
+    c2[--x] = '\0'; 
+    int j = 0; 
+
+    while (x >= 0)
+    {
+        c2[--x] = c[j++];
+    }
+
+    terminal_write_string(c2);
+
+}

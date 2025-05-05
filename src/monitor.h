@@ -57,7 +57,7 @@ void terminal_putentryat(char c , uint8_t color, uint32_t x , uint32_t y);
 void terminal_putchar(char c); 
 void terminal_write(const char * data, uint32_t size); 
 void terminal_write_string(const char * data); 
-
+void terminal_write_dec(uint32_t n); 
 #endif // !MONITOR_H 
 
 
