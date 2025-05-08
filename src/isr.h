@@ -3,6 +3,9 @@
 
 #include "common.h"
 
+#define IRQ0    32 
+#define IRQ15   47 
+
 struct registers
 {
     /*data segment selector*/
@@ -30,6 +33,6 @@ struct registers
 typedef struct registers registers_t; 
 
 typedef void(*isr_t)(registers_t); 
-void register_interrput_handler(uint8_t, isr_t handler);
+void register_interrput_handler(uint8_t n, isr_t handler);
 
 #endif 
