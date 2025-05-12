@@ -68,34 +68,53 @@ void terminal_write_string(const char* data)
     terminal_write(data, strlen(data)); 
 }
 
+
 void terminal_write_dec(uint32_t n)
 {
-    if(n == 0)
+    // Special case: handle zero explicitly
+    if (n == 0)
     {
         terminal_putchar('0');
         return;
     }
-    int32_t acc = n ; 
-    char c[32]; 
-    int x = 0;
 
-    while(acc > 0)
+    // Buffer to store extracted digits (in reverse order)
+    char digit_buffer[32]; 
+    
+    // Index to track current position in digit_buffer
+    int buffer_index = 0;
+
+    // Local copy of input to avoid modifying original
+    uint32_t current_number = n;
+
+    // Extract digits from least significant to most significant
+    while (current_number > 0)
     {
-        c[x] = '0' + (acc % 10); 
-        acc /= 10; 
-        ++x; 
+        // Convert digit to character and store in buffer
+        // Use '0' + remainder to convert numeric digit to character
+        digit_buffer[buffer_index++] = '0' + (current_number % 10);
+        
+        // Integer division to move to next digit
+        current_number /= 10;
     }
-    c[x] = '\0'; 
 
-    char c2[32]; 
-    c2[--x] = '\0'; 
-    int j = 0; 
+    // Null-terminate the buffer for safety
+    digit_buffer[buffer_index] = '\0';
 
-    while (x >= 0)
+    // Reversed string buffer
+    char reversed_buffer[32];
+    
+    // Reverse the digits to correct order
+    int reversed_index = 0;
+    while (buffer_index > 0)
     {
-        c2[--x] = c[j++];
+        // Copy digits from end of original buffer to start of reversed buffer
+        reversed_buffer[reversed_index++] = digit_buffer[--buffer_index];
     }
 
-    terminal_write_string(c2);
+    // Null-terminate the reversed buffer
+    reversed_buffer[reversed_index] = '\0';
 
+    // Write the reversed (now correct order) string to terminal
+    terminal_write_string(reversed_buffer);
 }

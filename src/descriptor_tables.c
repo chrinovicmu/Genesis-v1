@@ -30,11 +30,11 @@ static void init_gdt(void)
     gdt_ptr.limit = (sizeof(gdt_entry_t)*MAX_GDT_ENTRIES);
     gdt_ptr.base = (uint32_t)&gdt_entries;
 
-    gdt_set_gate(0, 0, 0, 0, 0);                
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); 
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); 
-    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); 
-    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); 
+    gdt_set_gate(0, 0, 0, 0, 0);                 /*Null segement */              
+    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);  /*Code segement */ 
+    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);  /*Data segement */ 
+    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);  /*User mode code segement */ 
+    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);  /*User mode data segement */ 
 
     gdt_load((uint32_t)&gdt_ptr); 
 }

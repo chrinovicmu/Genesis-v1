@@ -12,7 +12,7 @@ gdt_load:
     mov     fs, ax 
     mov     gs, ax 
     mov     ss, ax 
-    jmp     0x80:.load    ;far jump to code segment 
+    jmp     0x08:.load    ;far jump to code segment 
 
 .load:
     ret 
