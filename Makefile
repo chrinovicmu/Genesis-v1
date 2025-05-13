@@ -1,5 +1,5 @@
 
-SOURCES = src/boot.o src/kernel.o src/monitor.o src/common.o src/descriptor_tables.o src/isr.o src/interrupt.o src/timer.o src/gdt.o 
+SOURCES = src/boot.o src/kernel.o src/monitor.o src/common.o src/descriptor_tables.o src/isr.o src/interrupt.o src/timer.o src/gdt.o src/tinylib.o
 CFLAGS = -m32 -ffreestanding -O2 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -c
 LDFLAGS = -T src/linker.ld -ffreestanding -O2 -nostdlib
 ASFLAGS = -f elf32

@@ -113,7 +113,8 @@ isr_common_stub:
     sti 
     iret
 
-    [EXTERN irq_handler]
+
+[EXTERN irq_handler]
 
 irq_common_stub:
     pusha           ;push registers 
@@ -133,9 +134,9 @@ irq_common_stub:
     mov     es, bx 
     mov     es, bx 
     mov     fs, bx
-    mov     gx, bx 
+    mov     gs, bx 
 
-    popa    restore 
+    popa
     add     esp, 8 
     sti 
     iret 

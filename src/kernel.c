@@ -5,7 +5,7 @@
 #include "multiboot.h"
 #include "timer.h"
 #include "descriptor_tables.h"
-
+#include "tinylib.h"
 
 
 int kmain(struct mboot_info *mboot_ptr)

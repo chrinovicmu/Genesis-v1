@@ -1,5 +1,6 @@
 #include "common.h"
 #include "descriptor_tables.h"
+#include "tinylib.h"
 
 #define MAX_GDT_ENTRIES 5  
 #define MAX_IDT_ENTRIES 256 
