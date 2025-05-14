@@ -9,4 +9,4 @@ cp src/grub.cfg iso/boot/grub/grub.cfg
 
 grub-mkrescue -o kernel.iso iso
 
-qemu-system-i386 -kernel kernel/kernel.bin
+qemu-system-i386 -kernel kernel/kernel.bin -d int -D qemu.log
