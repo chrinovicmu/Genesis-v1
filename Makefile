@@ -19,7 +19,7 @@ KERNEL_DIR = kernel
 all: $(KERNEL_DIR)/kernel.bin
 
 clean:
-	rm -f src/*.o $(KERNEL_DIR)/kernel.bin
+	rm -f $(SOURCES) $(KERNEL_DIR)/kernel.bin
 
 $(KERNEL_DIR)/kernel.bin: $(SOURCES)
 	# Ensure the kernel directory exists
