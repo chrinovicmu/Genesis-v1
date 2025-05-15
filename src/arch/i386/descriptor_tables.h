@@ -1,7 +1,7 @@
 #ifndef  DESCRIPTOR_TABLES_H 
 #define DESCRIPTOR_TABLES_H
 
-#include "common.h"
+#include "../../lib/common.h"
 /*GDT entry*/ 
 
 struct gdt_entry

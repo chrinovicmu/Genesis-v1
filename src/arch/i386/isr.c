@@ -1,7 +1,7 @@
 
-#include "lib/common.h"
-#include "arch/i386/isr.h"
-#include "drivers/graphics/monitor.h"
+#include "../../lib/common.h"
+#include "isr.h"
+#include "../../drivers/graphics/monitor.h"
 
 isr_t intertupt_handlers[256]; 
 

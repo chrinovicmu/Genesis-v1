@@ -1,7 +1,7 @@
 #ifndef ISR_H 
 #define ISR_H
 
-#include "lib/common.h"
+#include "../../lib/common.h"
 
 #define IRQ0    32 
 #define IRQ15   47 

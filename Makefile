@@ -2,7 +2,6 @@
 SOURCES = src/boot/boot.o \
 		  src/kernel/kernel.o \
 		  src/drivers/graphics/monitor.o \
-		  src/lib/common.o \
 		  src/arch/i386/descriptor_tables.o \
 		  src/arch/i386/isr.o \
 		  src/arch/i386/interrupt.o \

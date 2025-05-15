@@ -1,21 +1,12 @@
-#include "lib/common.h"
+#include "../../lib/common.h"
 #include "descriptor_tables.h"
-#include "lib/tinylib.h"
+#include "../../lib/tinylib.h"
 
-#define MAX_GDT_ENTRIES 5  
-#define MAX_IDT_ENTRIES 256 
-
-#define PIC1_COMMAND    0x20 
-#define PIC1_DATA       0X21
-#define PIC2_COMMAND    0xA0 
-#define PIC2_DATA       0xA1 
-
-#define ICW1_INIT       0x11 
-#define ICW4_8086       0x01 
-
-#define PIC_EOI         0x20 
-
-
+#define MAX_GDT_ENTRIES     5  
+#define MAX_IDT_ENTRIES     256 
+    
+#define PIC_MASTER_OFFSET   0x20 
+#define PIC_SLAVE_OFFSET    0x28 
 
 extern void gdt_load(uint32_t); 
 extern void idt_load(uint32_t); 
@@ -33,14 +24,6 @@ gdt_ptr_t   gdt_ptr;
 idt_ptr_t   idt_ptr; 
 
 
-void PIC_send_EIO(uint8_t irq)
-{
-    if(irq >= 8)
-    {
-        outb(PIC2_COMMAND, PIC_EOI); /*tell slave PIC interrupt handled*/ 
-    }
-    outb(PIC1_COMMAND, PIC_EOI);    /*allways tell the master PIC  */
-}
 static void init_gdt(void)
 {
     gdt_ptr.limit = (sizeof(gdt_entry_t)*MAX_GDT_ENTRIES);
@@ -64,28 +47,8 @@ static void init_idt(void)
     memset(&idt_entries, 0, sizeof(idt_entry_t)*MAX_IDT_ENTRIES);
 
     /*remap the irq table*/
-
-    /*ICW1*/ 
-    outb(PIC1_COMMAND, ICW1_INIT);
-    outb(0xA0, 0x11); 
-
-    /*ICW2 */ 
-    outb(0x21, 0x20); /*irq 0-7 */ 
-    outb(0xA1, 0x28); /*urp 8-15 */ 
-
-    /*ICW3 */ 
-    outb(0x21, 0x04); /*irq line 2 - 0x0100-connecting to slave */ 
-    outb(0xA1, 0x02); /*irq line 2 - bin(2)= 0x02 */ 
-
-    /*ICW4 */
-    /*80x86 mode */ 
-    outb(0x21, 01); 
-    outb(0xA1, 01);
-
-    /*OCW */
-    outb(0x21, 0x0);
-    outb(0x21, 0x0); 
-
+    PIC_remap(PIC_MASTER_OFFSET, PIC_SLAVE_OFFSET);
+    
     idt_set_gate(0, (uint32_t)isr0, 0x08, 0x8E);
     idt_set_gate(1, (uint32_t)isr1, 0x08, 0x8E);
     idt_set_gate(2, (uint32_t)isr2, 0x08, 0x8E);

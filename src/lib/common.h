@@ -29,7 +29,7 @@ uint8_t inb(uint16_t port)
         "inb %w1, %b0"
         : "=a" (ret)
         : "Nd"(port)
-        :"memory"; 
+        :"memory"
     );
 }
 uint16_t inw(uint16_t port)
