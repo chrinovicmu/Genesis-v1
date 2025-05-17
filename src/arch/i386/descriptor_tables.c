@@ -1,6 +1,7 @@
 #include "../../lib/common.h"
 #include "descriptor_tables.h"
 #include "../../lib/tinylib.h"
+#include "../../drivers/pic.h"
 
 #define MAX_GDT_ENTRIES     5  
 #define MAX_IDT_ENTRIES     256 

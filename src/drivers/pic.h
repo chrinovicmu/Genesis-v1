@@ -1,7 +1,7 @@
 #ifndef PIC_H 
 #define PIC_H 
 
-#include "lib/common.h"
+#include "../lib/common.h"
 
 #define PIC_1_COMMAND   0x20
 #define PIC_2_COMMAND   0xA0
@@ -135,4 +135,4 @@ uint16_t __pic_get_ISR(void)
 
 #endif // !PIC_H 
 #define PIC_H 
-I
+
