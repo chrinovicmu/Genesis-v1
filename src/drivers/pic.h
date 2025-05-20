@@ -26,7 +26,7 @@
 #define PIC_READ_ISR    0x0B 
 
 
-void PIC_sendEOI(uint8_t irq)
+void _pic_sendEOI(uint8_t irq)
 {
     /*if irq came from master , issue EIO to master only */ 
     /*if irq came from slave (irq => 8), issue to both */ 
@@ -36,7 +36,7 @@ void PIC_sendEOI(uint8_t irq)
     }    outb(PIC_1_COMMAND, PIC_EOI); /*always issue to master */  
 }
 
-void PIC_remap(int offset1, int offset2)
+void _pic_remap(int offset1, int offset2)
 {
     //init initialization sequence (cascade mode )
     outb(PIC_1_COMMAND, ICW1_INIT | ICW1_ICW4); 
@@ -73,7 +73,7 @@ void PIC_remap(int offset1, int offset2)
     outb(PIC_2_DATA, 0);
 }
 
-void pic_disable(void)
+void _pic_disable(void)
 {
     outb(PIC_1_DATA, 0xFF);
     outb(PIC_2_DATA, 0xFF); 

@@ -1,3 +1,4 @@
 ## Genesis ## 
 
-Building a unix based kernel. currently in progress 
+Building a 32 bit Monolithic Operating System. 
+Still Progress 

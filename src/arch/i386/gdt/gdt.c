@@ -5,6 +5,7 @@
 #define MAX_GDT_ENTRIES     5
 
 extern gdt_load(uint32_t); 
+extern gdt_flush(uint32_t); 
 
 gdt_entry_t gdt_entries[MAX_GDT_ENTRIES]; 
 gdt_ptr_t   gdt_ptr; 
