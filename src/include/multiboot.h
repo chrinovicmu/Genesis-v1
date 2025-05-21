@@ -2,7 +2,7 @@
 #ifndef MBOOT_HEADER 
 #define MBOOT_HEADER 1
 
-#include "../lib/common.h"
+#include "lib/common.h"
 
 /*how many bytes from start of file to search for the header */ 
 #define MBOOT_SEARCH            8192 

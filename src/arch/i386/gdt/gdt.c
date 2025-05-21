@@ -1,11 +1,10 @@
 #include "gdt.h"
-#include "../../../lib/common.h"
-#include "../../../lib/tinylib.h"
+#include "lib/common.h"
+#include "lib/tinylib.h"
 
-#define MAX_GDT_ENTRIES     5
+#define MAX_GDT_ENTRIES     6
 
-extern gdt_load(uint32_t); 
-extern gdt_flush(uint32_t); 
+extern void gdt_load(uint32_t); 
 
 gdt_entry_t gdt_entries[MAX_GDT_ENTRIES]; 
 gdt_ptr_t   gdt_ptr; 
@@ -27,7 +26,7 @@ static void gdt_set_entries(uint32_t entry_num, uint32_t base, uint32_t limit,
 void init_gdt(void)
 {
     gdt_ptr.limit = (sizeof(gdt_entry_t) * MAX_GDT_ENTRIES);
-    gdt_ptr.base  = &gdt_entries; 
+    gdt_ptr.base  =(uint32_t)&gdt_entries; 
 
     gdt_set_entries(0, 0, 0, 0, 0);
     /*kernel code */ 
@@ -45,7 +44,7 @@ void init_gdt(void)
                     GDT_DESCRIPTOR_EXECUTABLE,
                     GDT_BASIC_GRANULARITY); 
     /*user data */
-    gdt_set_entries(4, 0xFFFFFFFF, GDT_BASIC_DESCRIPTOR |
+    gdt_set_entries(4, 0, 0xFFFFFFFF, GDT_BASIC_DESCRIPTOR |
                     GDT_DESCRIPTOR_DPL, 
                     GDT_BASIC_GRANULARITY);
 

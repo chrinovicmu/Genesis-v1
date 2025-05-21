@@ -1,4 +1,4 @@
-#include "../../lib/common.h"
+#include "lib/common.h"
 #include "monitor.h"
 
 uint32_t terminal_row; 

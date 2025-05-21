@@ -1,4 +1,5 @@
 
+#include "../gdt/gdt.h"
 
 %macro ISR_NOERRCODE 1
 
@@ -18,8 +19,9 @@
     
     isr%1:
         cli 
-        push    byte %1
-        jmp     isr_common_stub
+        push    byte    0
+        push    byte    %1
+        jmp         isr_common_stub
 %endmacro
 
 %macro IRQ  2 
@@ -84,6 +86,13 @@ IRQ  14,    46
 IRQ  15,    47
 
 
+[GLOBAL syscall_intr]
+syscall_intr:
+    cli 
+    push    byte 0 
+    push    dword 0x0000080
+    jmp     irq_common_stub 
+
 [EXTERN isr_handler]
 
 isr_common_stub:
@@ -94,7 +103,7 @@ isr_common_stub:
     push    eax 
 
     ;transition to kernel data segemnt descripto 
-    mov     ax, 0x10 
+    mov     ax, GDT_OFFSET_KERNEL_DATA  
     mov     ds, ax 
     mov     es, ax 
     mov     fs, ax 
@@ -125,10 +134,13 @@ isr_common_stub:
 irq_common_stub:
     pusha           ;push registers 
 
+    ;save current data segment 
     mov     ax, ds 
     push    eax
 
-    mov     ax, 0x10 
+    ;load kernel segment selectors 
+    
+    mov     ax, GDT_OFFSET_KERNEL_DATA
     mov     ds, ax 
     mov     es, ax 
     mov     fs, ax 
@@ -138,14 +150,20 @@ irq_common_stub:
     call    irq_handler 
     add     esp, 4 
 
+    ;restore    old segment selectos 
     pop     ebx
     mov     es, bx 
     mov     es, bx 
     mov     fs, bx
     mov     gs, bx 
 
+    ;restore common registers 
     popa
+    
+    ;remove ISR from stack 
     add     esp, 8 
+
+    ;re-enbale interrupts 
     sti 
     iret 
 

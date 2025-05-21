@@ -1,10 +1,10 @@
 
 #include "idt.h" 
-#include "../../../lib/common.h"
-#include "../../../lib/tinylib.h"
-#include "../../../drivers/pic.h"
-#incluce "../interrupts/isr.h"
-#include "../gdt/gdt.h"
+#include "lib/common.h"
+#include "lib/tinylib.h"
+#include "drivers/pic.h"
+#incluce "interrupts/isr.h"
+#include "arch/i386/gdt/gdt.h"
 
 extern void idt_load(uint32_t); 
 

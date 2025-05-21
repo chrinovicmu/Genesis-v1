@@ -2,14 +2,16 @@
 SOURCES = src/boot/boot.o \
 		  src/kernel/kernel.o \
 		  src/drivers/graphics/monitor.o \
-		  src/arch/i386/descriptor_tables.o \
-		  src/arch/i386/isr.o \
-		  src/arch/i386/interrupt.o \
+		  src/arch/i386/gdt/gdt.o \
+		  src/arch/i386/idt/idt.o \
+		  src/arch/i386/interrupts/isr.o \
 		  src/drivers/timer/timer.o \
-		  src/arch/i386/gdt.o \
 		  src/lib/tinylib.o
 
-CFLAGS = -m32 -ffreestanding -O2 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -c
+CFLAGS = -m32 -ffreestanding -O2 -nostdlib -nostdinc \
+		 -fno-builtin -fno-stack-protector -c \
+		 -Isrc 
+
 LDFLAGS = -T src/linker.ld -ffreestanding -O2 -nostdlib
 ASFLAGS = -f elf32
 

@@ -1,8 +1,8 @@
 #ifndef IDT_H 
 #define IDT_H 
 
-#include "../../../lib/common.h"
-#include "../gdt/gdt.h"
+#include "lib/common.h"
+#include "arch/i386/gdt/gdt.h"
 
 #define IDT_DESCRIPTOR_RING0                0x00
 #define IDT_DESCRIPTOR_RING1                0x40 

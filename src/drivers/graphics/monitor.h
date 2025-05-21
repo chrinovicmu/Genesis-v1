@@ -1,7 +1,7 @@
 #ifndef MONITOR_H 
 #define MONITOR_H 
 
-#include "../../lib/common.h"
+#include "lib/common.h"
 
 #define VGA_WIDTH   80
 #define VGA_HEIGHT  25

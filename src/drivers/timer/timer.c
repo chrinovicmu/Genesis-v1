@@ -1,6 +1,6 @@
 #include "timer.h"
-#include "../../arch/i386/isr.h"
-#include "../graphics/monitor.h"
+#include "arch/i386/isr.h"
+#include "graphics/monitor.h"
 
 uint32_t tick = 0; 
 

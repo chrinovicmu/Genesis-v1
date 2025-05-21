@@ -1,7 +1,7 @@
 #ifndef GDT_H 
 #define GDT_H
 
-#include "../../../common.h"
+#include "lib/common.h"
 
 #define GDT_MAX_DESCRIPTORS         0x2000 
 #define GDT_DESCRIPTOR_SIZE         0x08 
@@ -40,7 +40,7 @@ struct gdt_entry
     uint16_t    base_low; 
     uint8_t     base_middle; 
     uint8_t     access_byte; ;
-    uint8_t     granuality; 
+    uint8_t     granularity; 
     uint8_t     base_high; 
 }__attribute__((packed)); 
 

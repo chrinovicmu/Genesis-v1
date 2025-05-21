@@ -1,7 +1,7 @@
 #ifndef ISR_H 
 #define ISR_H
 
-#include "../../lib/common.h"
+#include "lib/common.h"
 
 #define ISR0    0
 #define ISR1    1
