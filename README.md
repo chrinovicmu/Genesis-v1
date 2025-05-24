@@ -1,4 +1,4 @@
-## Genesis V1## 
+## Genesis V1 ## 
 
 Building a 32 bit Monolithic Operating System. 
 Still in Progress 
