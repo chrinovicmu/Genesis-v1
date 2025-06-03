@@ -1,9 +1,9 @@
 
-%include "../gdt/gdt.h"
+%include "../gdt/gdt.inc"
 
 %macro ISR_NOERRCODE 1
 
-    [GLOBAL isr%1]
+    global isr%1
 
     isr%1:
         cli 
@@ -15,7 +15,7 @@
 
 %macro ISR_ERRCODE  1
 
-    [GLOBAL isr%1]
+    global isr%1
     
     isr%1:
         cli 
@@ -24,7 +24,7 @@
 %endmacro
 
 %macro IRQ  2 
-    [GLOBAL irq%1]
+    global irq%1
     irq%1:
         cli 
         push    byte 0 
@@ -85,14 +85,7 @@ IRQ  14,    46
 IRQ  15,    47
 
 
-[GLOBAL syscall_intr]
-syscall_intr:
-    cli 
-    push    byte 0 
-    push    dword 0x80
-    jmp     irq_common_stub 
-
-[EXTERN isr_handler]
+extern isr_handler
 
 isr_common_stub:
     pusha       ;pushes edi, esi, ebp, esp, ebx, esx, ecx, eax 
@@ -128,7 +121,7 @@ isr_common_stub:
     iret
 
 
-[EXTERN irq_handler]
+extern irq_handler
 
 irq_common_stub:
     pusha           ;push registers 

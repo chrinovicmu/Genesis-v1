@@ -1,7 +1,7 @@
 
-%include "gdt.h"
+%include "gdt.inc"
 
-[GLOBAL gdt_load]
+global gdt_load
 
 gdt_load:
 

@@ -1,4 +1,4 @@
-[GLOBAL idt_load]
+global idt_load
 
 idt_load:
     mov     eax, [esp + 4]
