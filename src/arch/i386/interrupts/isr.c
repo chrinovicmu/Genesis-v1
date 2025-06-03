@@ -66,7 +66,7 @@ void irq_handler(registers_t *regs)
 {
     uint8_t irq = regs->int_no - 32; 
 
-    pic_sendEOI(irq); 
+    _pic_sendEOI(irq); 
 
     if(intertupt_handlers[regs->int_no] != 0)
     {

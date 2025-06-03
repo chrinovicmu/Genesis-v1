@@ -3,28 +3,29 @@
 #include "lib/common.h"
 #include "lib/tinylib.h"
 #include "drivers/pic.h"
-#incluce "interrupts/isr.h"
+#include "arch/i386/interrupts/isr.h"
 #include "arch/i386/gdt/gdt.h"
 
 extern void idt_load(uint32_t); 
 
 idt_entry_t idt_entries[MAX_IDT_ENTRIES]; 
 
+idt_ptr_t idt_ptr; 
 
 static void idt_set_gate(uint8_t idt_entry_num, uint32_t base,
                          uint16_t selector, uint8_t attribute_flags)
 {
-    if(idt_entry_t > MAX_IDT_ENTRIES)
+    if(idt_entry_num > MAX_IDT_ENTRIES)
     {
         return ; 
     }
-    idt_entries[num].offset_low = base & 0xFFFF; 
-    idt_entries[num].offset_high = (base >> 16) & 0xFFFF; 
+    idt_entries[idt_entry_num].offset_low = base & 0xFFFF; 
+    idt_entries[idt_entry_num].offset_high = (base >> 16) & 0xFFFF; 
 
-    idt_entries[num].sel = sel; 
-    idt_entries[num].always0 = 0x00;
+    idt_entries[idt_entry_num].selector = selector; 
+    idt_entries[idt_entry_num].always0 = 0x00;
 
-    idt_entries[num].attribute_flags = attribute_flags;
+    idt_entries[idt_entry_num].attribute_flags = attribute_flags;
 
  }
 
@@ -33,7 +34,7 @@ void init_idt(void)
     idt_ptr.limit = sizeof(idt_entry_t) * MAX_IDT_ENTRIES -1;
     idt_ptr.base = (uint32_t)&idt_entries;
 
-    memset(&idt_entries, 0 sizeof(idt_entry_t)*256); 
+    memset(&idt_entries, 0 ,sizeof(idt_entry_t)*256); 
 
     idt_set_gate(ISR0, (uint32_t)isr0, GDT_OFFSET_KERNEL_CODE, IDT_BASIC_DESCRIPTOR);
     idt_set_gate(ISR1, (uint32_t)isr1, GDT_OFFSET_KERNEL_CODE, IDT_BASIC_DESCRIPTOR);

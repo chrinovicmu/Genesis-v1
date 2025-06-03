@@ -1,5 +1,5 @@
 
-#include "gdt.h"
+%include "gdt.h"
 
 [GLOBAL gdt_load]
 

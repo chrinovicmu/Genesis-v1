@@ -1,5 +1,5 @@
 
-#include "../gdt/gdt.h"
+%include "../gdt/gdt.h"
 
 %macro ISR_NOERRCODE 1
 
@@ -19,7 +19,6 @@
     
     isr%1:
         cli 
-        push    byte    0
         push    byte    %1
         jmp         isr_common_stub
 %endmacro
@@ -90,7 +89,7 @@ IRQ  15,    47
 syscall_intr:
     cli 
     push    byte 0 
-    push    dword 0x0000080
+    push    dword 0x80
     jmp     irq_common_stub 
 
 [EXTERN isr_handler]
@@ -152,7 +151,7 @@ irq_common_stub:
 
     ;restore    old segment selectos 
     pop     ebx
-    mov     es, bx 
+    mov     gs, bx 
     mov     es, bx 
     mov     fs, bx
     mov     gs, bx 
